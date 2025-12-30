@@ -67,7 +67,7 @@
             color: var(--white);
         }
 
-        /* BIG HEADER STYLE */
+       
         .big-header {
             font-weight: 900;
             font-size: clamp(2.5rem, 8vw, 4rem);
@@ -181,7 +181,7 @@
         alert(`✨ SUCCESS! ✨\nYour special wishes for ${userName} have been launched!`);
     }
 
-    // --- Countdown ---
+    
     function updateTimer() {
         const diff = new Date("Jan 1, 2026 00:00:00") - new Date();
         const d = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -193,7 +193,7 @@
     setInterval(updateTimer, 1000);
     updateTimer();
 
-    // --- Firework Rocket Logic (Skyshots) ---
+    
     const canvas = document.getElementById('fireworkCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -264,4 +264,5 @@
 </body>
 
 </html>
+
 
