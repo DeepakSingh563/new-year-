@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-bright: #f9e29c;
+            --white: #ffffff;
+            --glass: rgba(0, 0, 0, 0.75);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #000;
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #fireworkCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+        }
+
+        .page { display: none; animation: slideUp 0.6s ease-out forwards; }
+        .page.active { display: block; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* BIG HEADER STYLE */
+        .big-header {
+            font-weight: 900;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, #fff, var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 { font-weight: 300; letter-spacing: 4px; margin-bottom: 20px; font-size: 1rem; color: var(--gold-bright); }
+        p { line-height: 1.8; margin-bottom: 25px; font-weight: 300; font-size: 1.1rem; }
+        
+        .name-input-group { margin: 30px 0; }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+            font-size: 1.1rem;
+            font-family: inherit;
+        }
+
+        button {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        button:hover { background: var(--gold-bright); transform: scale(1.05); box-shadow: 0 0 20px var(--gold); }
+        .btn-back { background: transparent; border: 1px solid var(--white); color: var(--white); margin-top: 15px; padding: 10px 25px; font-size: 0.8rem;}
+
+        #timer { font-size: 1.8rem; font-weight: 700; color: var(--gold); margin: 20px 0; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+
+<canvas id="fireworkCanvas"></canvas>
+
+<div class="container">
+    <div id="p1" class="page active">
+        <h2>COUNTDOWN TO 2026</h2>
+        <div id="timer"></div>
+        <div class="name-input-group">
+            <p>Who is this special celebration for?</p>
+            <input type="text" id="nameInput" placeholder="Enter their name..." autocomplete="off">
+        </div>
+        <button onclick="startJourney()">Launch Celebration</button>
+    </div>
+
+    <div id="p2" class="page">
+        <h1 class="big-header">Happy New Year <br>Dear <span class="display-name"></span></h1>
+        <p>As the rockets light up the sky, they celebrate the amazing person you are. May this year be filled with endless joy and success.</p>
+        <button onclick="nav(3)">Next</button>
+        <br><button class="btn-back" onclick="nav(1)">Back</button>
+    </div>
+
+    <div id="p3" class="page">
+        <h1 class="big-header">A Bright 2026 <br>for <span class="display-name"></span></h1>
+        <p>"The magic of new beginnings is the most powerful of all."</p>
+        <p>Keep shining bright, <span class="display-name"></span>. Your journey is just beginning.</p>
+        <button onclick="nav(4)">Next</button>
+        <br><button class="btn-back" onclick="nav(2)">Back</button>
+    </div>
+
+    <div id="p4" class="page">
+        <h1 class="big-header">Best Wishes <br><span class="display-name"></span></h1>
+        <form onsubmit="sendWish(event)">
+            <textarea id="personalWish" placeholder="Write a special resolution or wish..." rows="4" required></textarea>
+            <button type="submit" style="width: 100%;">🚀 Send to the Stars 🚀</button>
+        </form>
+        <button class="btn-back" onclick="nav(3)">Back</button>
+    </div>
+</div>
+
+<script>
+    let userName = "Someone Special";
+
+    function startJourney() {
+        const input = document.getElementById('nameInput').value.trim();
+        if (input !== "") {
+            userName = input;
+            document.querySelectorAll('.display-name').forEach(el => {
+                el.innerText = userName;
+            });
+            nav(2);
+        } else {
+            alert("Please enter a name to begin!");
+        }
+    }
+
+    function nav(pageNumber) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('p' + pageNumber).classList.add('active');
+    }
+
+    function sendWish(e) {
+        e.preventDefault();
+        alert(`✨ SUCCESS! ✨\nYour special wishes for ${userName} have been launched!`);
+    }
+
+    // --- Countdown ---
+    function updateTimer() {
+        const diff = new Date("Jan 1, 2026 00:00:00") - new Date();
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / 1000 / 60) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        document.getElementById('timer').innerText = `${d}d : ${h}h : ${m}m : ${s}s`;
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // --- Firework Rocket Logic (Skyshots) ---
+    const canvas = document.getElementById('fireworkCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let rockets = [];
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Rocket {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = canvas.height;
+            this.speed = Math.random() * 3 + 5;
+            this.targetY = Math.random() * (canvas.height / 2);
+            this.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        }
+        update() { this.y -= this.speed; }
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    class Particle {
+        constructor(x, y, color) {
+            this.x = x; this.y = y;
+            this.color = color;
+            this.velocity = { x: (Math.random() - 0.5) * 12, y: (Math.random() - 0.5) * 12 };
+            this.alpha = 1;
+        }
+        draw() {
+            ctx.globalAlpha = this.alpha;
+            ctx.fillStyle = this.color;
+            ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI * 2); ctx.fill();
+        }
+        update() {
+            this.x += this.velocity.x; this.y += this.velocity.y;
+            this.alpha -= 0.015;
+        }
+    }
+
+    function animate() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if (Math.random() < 0.06) rockets.push(new Rocket());
+        rockets.forEach((r, i) => {
+            r.update(); r.draw();
+            if (r.y <= r.targetY) {
+                for (let j = 0; j < 60; j++) particles.push(new Particle(r.x, r.y, r.color));
+                rockets.splice(i, 1);
+            }
+        });
+        particles.forEach((p, i) => {
+            if (p.alpha <= 0) particles.splice(i, 1);
+            else { p.update(); p.draw(); }
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+</script>
+
+</body>
+</html>
